@@ -1,5 +1,5 @@
 public class Playgame {
-    public void play_now() {
+    public void play_now() throws Exception{
 
         Player player = new Player(1);
         Player enemy = new Player(2);
@@ -11,27 +11,81 @@ public class Playgame {
         enemy.start();
 
         while (true) {
+
             if (round > 256 || !player.is_Live() || !enemy.is_Live()) break;
-            if (repo == 0) {
-                // 执行player更新
+
+            if (repo % Global.BULLET_SPEED == 0) {
+                // run an instruction
                 Global.player1.release();
                 Global.player2.release();
 
+                Global.over_player_update1.acquire(1);
+                Global.over_player_update2.acquire(1);
+
                 update_map(player, enemy);
                 round++;
-            }
 
+                int p1_x = player.get_local_x(), p1_y = player.get_local_y(), p2_x = enemy.get_local_x(), p2_y = enemy.get_local_y();
+
+                Global.read_data.acquire(2);
+
+                // execute read data
+
+                System.out.println("[round="+ round + "], last_location is "
+                        + Global.player1_last_x + "-" + Global.player1_last_y
+                        + " , alive = " + player.is_Live()
+                );
+                System.out.println("[round="+ round + "], location is "
+                        + p1_x + "-" + p1_y
+                        + " , alive = " + player.is_Live()
+                );
+
+//                System.out.println("[round="+ round + "], location is "
+//                        + p2_x + "-" + p2_y
+//                        + " , alive = " + enemy.is_Live()
+//                );
+                Thread.sleep(10);
+                // execute read data end
+                // Global.read_data.release(2);
+            }
             // 执行弹体更新
             update_fire();
             change_live(player, enemy);
             repo = (repo + 1) % Global.BULLET_SPEED;
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            player.stop();
+            enemy.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+
+        if (player.is_Live() ^ enemy.is_Live()) {
+            if (player.is_Live()) winner(player);
+            else winner(enemy);
+        }
+        else {
+            int res = calculate_area();
+            switch (res) {
+                case 1: {
+                    winner(player);
+                    break;
+                }
+                case -1: {
+                    winner(enemy);
+                    break;
+                }
+                case 0: {
+                    System.out.println("Draw!");
+                }
+            }
         }
 
 
@@ -75,18 +129,35 @@ public class Playgame {
 
     public void change_live(Player player1, Player player2) {
         // check player1 islive
-        // if role's x and role's y are equal with firemap, kill now.
+        // if role's x and role's y are equal with changed enemy's fire's map, kill now.
         for (int i = 0; i < Global.player2_fireMap_pointer; i++) {
-            if (player1.get_local_x() == Global.player2_fireMap[i][2]
-                    && player1.get_local_y() == Global.player2_fireMap[i][3]) {
+            if (player1.get_local_x() == Global.MAP_MAX_X - Global.player2_fireMap[i][2] - 1
+                    && player1.get_local_y() == Global.MAP_MAX_Y - Global.player2_fireMap[i][3] - 1) {
                 player1.kill();
             }
         }
         for (int i = 0; i < Global.player1_fireMap_pointer; i++) {
-            if (player2.get_local_x() == Global.player2_fireMap[i][2]
-                    && player2.get_local_y() == Global.player2_fireMap[i][3]) {
+            if (player2.get_local_x() == Global.MAP_MAX_X - Global.player1_fireMap[i][2] - 1
+                    && player2.get_local_y() == Global.MAP_MAX_Y - Global.player1_fireMap[i][3] - 1) {
                 player2.kill();
             }
         }
+    }
+
+    public int calculate_area() {
+        int player1 = 0, player2 = 0;
+        for (int i = 0; i < Global.MAP_MAX_X; i++) {
+            for (int j = 0; j < Global.MAP_MAX_Y; j++) {
+                if (Global.player1_map[i][j] == 1) player1++;
+                if (Global.player2_map[i][j] == 1) player2++;
+            }
+        }
+        if (player1 > player2) return 1;
+        else if (player1 == player2) return 0;
+        else return -1;
+    }
+
+    public void winner(Player player) {
+        System.out.println("Winner is: Player" + player.choose + "!");
     }
 }
