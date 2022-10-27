@@ -5,8 +5,9 @@ public class hello {
             Global.replay();
             playgame.start();
 
-            Main_game_interface main_game_interface = new Main_game_interface();
-            main_game_interface.show();
+
+
+
 
         } catch (Exception e) {
             e.printStackTrace();

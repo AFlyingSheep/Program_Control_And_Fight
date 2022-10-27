@@ -31,7 +31,15 @@ public class Global {
     static int player2_last_x;
     static int player2_last_y;
 
+    static int player1_now_x;
+    static int player1_now_y;
+
+    static int player2_now_x;
+    static int player2_now_y;
+
     static final int BULLET_SPEED = 3;
+
+    static final int GAME_SPEED = 50;
 
     static final int MAX_ROUND = 256;
 
@@ -66,6 +74,9 @@ public class Global {
                 player2_map[i][j] = 0;
             }
 
+        player1_map[0][0] = 1;
+        player2_map[0][0] = 1;
+
         player1_fireMap_pointer = 0;
         player2_fireMap_pointer = 0;
 
@@ -74,5 +85,9 @@ public class Global {
         player2_last_x = 0;
         player2_last_y = 0;
 
+        player1_now_x = 0;
+        player1_now_y = 0;
+        player2_now_x = 0;
+        player2_now_y = 0;
     }
 }

@@ -41,6 +41,7 @@ public class Player extends Thread{
                 && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
         {
             local_x++;
+            direction = 3;
             release_Sem();
 //            System.out.println("right");
             return true;
@@ -59,6 +60,7 @@ public class Player extends Thread{
                 enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
         {
             local_x--;
+            direction = 2;
             release_Sem();
 //            System.out.println("left");
             return true;
@@ -77,6 +79,7 @@ public class Player extends Thread{
                 && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
         {
             local_y++;
+            direction = 1;
             release_Sem();
 //            System.out.println("down");
             return true;
@@ -95,6 +98,7 @@ public class Player extends Thread{
                 && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
         {
             local_y--;
+            direction = 0;
             release_Sem();
 //            System.out.println("up");
             return true;

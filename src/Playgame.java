@@ -1,4 +1,14 @@
+import javax.swing.*;
+import java.awt.*;
+
 public class Playgame extends Thread{
+
+    Main_game_interface main_game_interface;
+
+    public Playgame() {
+        main_game_interface = new Main_game_interface();
+        main_game_interface.setVisible(true);
+    }
 
     @Override
     public void run(){
@@ -30,6 +40,12 @@ public class Playgame extends Thread{
 
                     // execute read data
 
+                    Global.player1_now_x = player.get_local_x();
+                    Global.player1_now_y = player.get_local_y();
+
+                    Global.player2_now_x = enemy.get_local_x();
+                    Global.player2_now_y = enemy.get_local_y();
+
                     System.out.println("[round="+ round + "], last_location is "
                             + Global.player1_last_x + "-" + Global.player1_last_y
                             + " , alive = " + player.is_Live()
@@ -41,15 +57,16 @@ public class Playgame extends Thread{
 
 
 
+
 //                System.out.println("[round="+ round + "], location is "
 //                        + p2_x + "-" + p2_y
 //                        + " , alive = " + enemy.is_Live()
 //                );
-                    try {
-                        Thread.sleep(10);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        Thread.sleep(Global.GAME_SPEED);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
                     // execute read data end
                 }
                 // 执行弹体更新
@@ -57,8 +74,10 @@ public class Playgame extends Thread{
                 change_live(player, enemy);
                 repo = (repo + 1) % Global.BULLET_SPEED;
 
+                main_game_interface.my_panel.repaint();
+
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(Global.GAME_SPEED);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -101,7 +120,7 @@ public class Playgame extends Thread{
     public void update_map(Player player1, Player player2) {
 //        static int[][] map;             // index: x, y
         Global.player1_map[player1.get_local_x()][player1.get_local_y()] = 1;
-        Global.player2_map[player1.get_local_x()][player1.get_local_y()] = 1;
+        Global.player2_map[player2.get_local_x()][player2.get_local_y()] = 1;
     }
     public void update_fire() {
 //        static int[][] player1_fireMap; // index: no, direction, x, y, valid
@@ -166,5 +185,13 @@ public class Playgame extends Thread{
 
     public void winner(Player player) {
         System.out.println("Winner is: Player" + player.choose + "!");
+    }
+
+    public void update_frame() {
+//        Shape shape = new Rectangle();
+//        Graphics g = shape.getGraphics();
+//        g.drawOval(0, 0, 100, 100);
+//        main_game_interface.panel1.paint(g);
+
     }
 }
