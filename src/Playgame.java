@@ -1,6 +1,7 @@
-public class Playgame {
-    public void play_now() throws Exception{
+public class Playgame extends Thread{
 
+    @Override
+    public void run(){
         Player player = new Player(1);
         Player enemy = new Player(2);
 
@@ -10,54 +11,60 @@ public class Playgame {
         player.start();
         enemy.start();
 
-        while (true) {
+        try {
+            while (!(round > 256 || !player.is_Live() || !enemy.is_Live())) {
+                if (repo % Global.BULLET_SPEED == 0) {
+                    // run an instruction
+                    Global.player1.release();
+                    Global.player2.release();
 
-            if (round > 256 || !player.is_Live() || !enemy.is_Live()) break;
+                    Global.over_player_update1.acquire(1);
+                    Global.over_player_update2.acquire(1);
 
-            if (repo % Global.BULLET_SPEED == 0) {
-                // run an instruction
-                Global.player1.release();
-                Global.player2.release();
+                    update_map(player, enemy);
+                    round++;
 
-                Global.over_player_update1.acquire(1);
-                Global.over_player_update2.acquire(1);
+                    int p1_x = player.get_local_x(), p1_y = player.get_local_y(), p2_x = enemy.get_local_x(), p2_y = enemy.get_local_y();
 
-                update_map(player, enemy);
-                round++;
+                    Global.read_data.acquire(2);
 
-                int p1_x = player.get_local_x(), p1_y = player.get_local_y(), p2_x = enemy.get_local_x(), p2_y = enemy.get_local_y();
+                    // execute read data
 
-                Global.read_data.acquire(2);
+                    System.out.println("[round="+ round + "], last_location is "
+                            + Global.player1_last_x + "-" + Global.player1_last_y
+                            + " , alive = " + player.is_Live()
+                    );
+                    System.out.println("[round="+ round + "], location is "
+                            + p1_x + "-" + p1_y
+                            + " , alive = " + player.is_Live()
+                    );
 
-                // execute read data
 
-                System.out.println("[round="+ round + "], last_location is "
-                        + Global.player1_last_x + "-" + Global.player1_last_y
-                        + " , alive = " + player.is_Live()
-                );
-                System.out.println("[round="+ round + "], location is "
-                        + p1_x + "-" + p1_y
-                        + " , alive = " + player.is_Live()
-                );
 
 //                System.out.println("[round="+ round + "], location is "
 //                        + p2_x + "-" + p2_y
 //                        + " , alive = " + enemy.is_Live()
 //                );
-                Thread.sleep(10);
-                // execute read data end
-                // Global.read_data.release(2);
-            }
-            // 执行弹体更新
-            update_fire();
-            change_live(player, enemy);
-            repo = (repo + 1) % Global.BULLET_SPEED;
+                    try {
+                        Thread.sleep(10);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // execute read data end
+                }
+                // 执行弹体更新
+                update_fire();
+                change_live(player, enemy);
+                repo = (repo + 1) % Global.BULLET_SPEED;
 
-            try {
-                Thread.sleep(10);
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    Thread.sleep(10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         try {
             player.stop();

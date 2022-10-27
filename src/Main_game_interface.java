@@ -9,8 +9,8 @@ import javax.swing.*;
 /**
  * @author 1
  */
-public class main_game extends JFrame {
-    public main_game() {
+public class Main_game_interface extends JFrame {
+    public Main_game_interface() {
         initComponents();
     }
 

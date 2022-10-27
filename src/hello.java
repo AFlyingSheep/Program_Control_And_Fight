@@ -3,7 +3,11 @@ public class hello {
         try {
             Playgame playgame = new Playgame();
             Global.replay();
-            playgame.play_now();
+            playgame.start();
+
+            Main_game_interface main_game_interface = new Main_game_interface();
+            main_game_interface.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
