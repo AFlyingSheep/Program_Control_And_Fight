@@ -21,6 +21,7 @@ public class Main_game_interface extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         panel1 = new JPanel();
+        progressBar1 = new JProgressBar();
 
         //======== this ========
         setMinimumSize(new Dimension(320, 320));
@@ -30,6 +31,8 @@ public class Main_game_interface extends JFrame {
         //======== panel1 ========
         {
             panel1.setLayout(null);
+            panel1.add(progressBar1);
+            progressBar1.setBounds(0, 320, 320, 20);
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
@@ -68,6 +71,7 @@ public class Main_game_interface extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private JPanel panel1;
+    private JProgressBar progressBar1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
 
@@ -82,22 +86,29 @@ class My_panel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.setColor(Color.YELLOW);
+
+
+
         // update player1
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
 
                 if (i == Global.player1_now_x && j == Global.player1_now_y) {
-                    g.setColor(Color.red);
+                    g.drawImage(Global.player1_image,
+                            i * 20, j * 20,i * 20 + 20, j * 20 + 20,
+                            0, 0,
+                            Global.player1_image.getWidth(null),Global.player1_image.getHeight(null),
+                            null);
                 }
 
                 else if (Global.player1_map[i][j] == 1) {
                     g.setColor(Color.YELLOW);
+                    g.fillRect(i * 20, j * 20, 20, 20);
                 }
                 else {
                     g.setColor(Color.WHITE);
+                    g.fillRect(i * 20, j * 20, 20, 20);
                 }
-                g.fillRect(i * 20, j * 20, 20, 20);
             }
         }
 
@@ -105,13 +116,18 @@ class My_panel extends JPanel {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 if (i == Global.player2_now_x && j == Global.player2_now_y) {
-                    g.setColor(Color.blue);
+                    g.drawImage(Global.player2_image,
+                            (15 - i) * 20, (15 - j) * 20,(15 - i) * 20 + 20, (15 - j) * 20 + 20,
+                            0, 0,
+                            Global.player2_image.getWidth(null),Global.player2_image.getHeight(null),
+                            null);
                 }
                 else if (Global.player2_map[i][j] == 1) {
                     g.setColor(Color.green);
+                    g.fillRect((15 - i) * 20, (15 - j) * 20, 20, 20);
                 }
-                else continue;
-                g.fillRect((15 - i) * 20, (15 - j) * 20, 20, 20);
+//                else continue;
+
             }
         }
 
@@ -131,6 +147,11 @@ class My_panel extends JPanel {
                         (15 - Global.player2_fireMap[i][3]) * 20 + 7,
                         5, 5);
             }
+        }
+
+        if (Global.game_is_over) {
+            g.setColor(Color.black);
+            g.drawString(Global.game_result_text[Global.game_result], 60, 160);
         }
 
     }

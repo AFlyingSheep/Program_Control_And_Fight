@@ -1,11 +1,43 @@
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.FileInputStream;
+import java.net.URL;
 import java.util.concurrent.Semaphore;
+import java.awt.event.*;
+import java.applet.*;
+
+import static sun.applet.AppletResourceLoader.getImage;
 
 public class Global {
 
 //    static Semaphore semaphore_public;
 
+    static boolean game_is_over;
+
+    // index:
+    // 0: player1 beats player2
+    // 1: player2 beats player1
+    // 2: player1 area larger than player2
+    // 3: player2 area larger than player1
+    // 4: player2 area equals player1
+
+
+    static int game_result;
+
+    static final String[] game_result_text = {
+            "Player1 beats Player2, Player1 Win!" ,
+            "Player2 beats Player1, Player2 Win!" ,
+            "Player1's area larger than Player2, Player1 Win!" ,
+            "Player2's area larger than Player1, Player2 Win!" ,
+            "Draw!!!"
+    };
+
+
     static Semaphore player1;
     static Semaphore player2;
+
+    static Image player1_image;
+    static Image player2_image;
 
     static Semaphore read_data;
     static Semaphore read_data1;
@@ -39,7 +71,7 @@ public class Global {
 
     static final int BULLET_SPEED = 3;
 
-    static final int GAME_SPEED = 50;
+    static final int GAME_SPEED = 10;
 
     static final int MAX_ROUND = 256;
 
@@ -89,5 +121,16 @@ public class Global {
         player1_now_y = 0;
         player2_now_x = 0;
         player2_now_y = 0;
+
+        game_is_over = false;
+        game_result = 0;
+
+        try {
+            player1_image = ImageIO.read(new FileInputStream("src/image/player1.jpg"));
+            player2_image = ImageIO.read(new FileInputStream("src/image/player2.jpg"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

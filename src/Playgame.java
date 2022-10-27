@@ -1,5 +1,7 @@
+import javax.rmi.CORBA.Util;
 import javax.swing.*;
 import java.awt.*;
+import java.util.TimerTask;
 
 public class Playgame extends Thread{
 
@@ -94,27 +96,45 @@ public class Playgame extends Thread{
 
 
         if (player.is_Live() ^ enemy.is_Live()) {
-            if (player.is_Live()) winner(player);
-            else winner(enemy);
+            if (player.is_Live()) {
+                Global.game_result = 0;
+                winner(player);
+            }
+            else{
+                Global.game_result = 1;
+                winner(enemy);
+            }
         }
         else {
             int res = calculate_area();
             switch (res) {
                 case 1: {
+                    Global.game_result = 2;
                     winner(player);
                     break;
                 }
                 case -1: {
+                    Global.game_result = 3;
                     winner(enemy);
                     break;
                 }
                 case 0: {
-                    System.out.println("Draw!");
+                    Global.game_is_over = true;
+                    Global.game_result = 4;
                 }
             }
+
         }
 
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                main_game_interface.my_panel.repaint();
+            }
+        };
 
+        java.util.Timer timer = new java.util.Timer();
+        timer.schedule(timerTask, 0, 100);
     }
 
     public void update_map(Player player1, Player player2) {
@@ -184,6 +204,7 @@ public class Playgame extends Thread{
     }
 
     public void winner(Player player) {
+        Global.game_is_over = true;
         System.out.println("Winner is: Player" + player.choose + "!");
     }
 
