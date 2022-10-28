@@ -183,12 +183,14 @@ public class Playgame extends Thread{
             if (player1.get_local_x() == Global.MAP_MAX_X - Global.player2_fireMap[i][2] - 1
                     && player1.get_local_y() == Global.MAP_MAX_Y - Global.player2_fireMap[i][3] - 1) {
                 player1.kill();
+                Global.player2_fireMap[i][4] = 0;
             }
         }
         for (int i = 0; i < Global.player1_fireMap_pointer; i++) {
             if (player2.get_local_x() == Global.MAP_MAX_X - Global.player1_fireMap[i][2] - 1
                     && player2.get_local_y() == Global.MAP_MAX_Y - Global.player1_fireMap[i][3] - 1) {
                 player2.kill();
+                Global.player1_fireMap[i][4] = 0;
             }
         }
     }
@@ -209,13 +211,5 @@ public class Playgame extends Thread{
     public void winner(Player player) {
         Global.game_is_over = true;
         System.out.println("Winner is: Player" + player.choose + "!");
-    }
-
-    public void update_frame() {
-//        Shape shape = new Rectangle();
-//        Graphics g = shape.getGraphics();
-//        g.drawOval(0, 0, 100, 100);
-//        main_game_interface.panel1.paint(g);
-
     }
 }

@@ -10,23 +10,8 @@ public class Enemy_function {
              * So, it's time to show your creativity!
              * */
             /* Edit your code */
-//            for (int i = 0; i < 8; i++) {
-//                player.go_right();
-//            }
-//            for (int i = 0; i < 8; i++) {
-//                player.go_down();
-//            }
-//            while (true) {
-//                player.fire();
-//                player.go_up();
-//                player.fire();
-//                player.go_left();
-//                player.fire();
-//                player.go_right();
-//                player.fire();
-//                player.go_down();
-//            }
-            for (int i = 0; i < 8; i++) player.go_right();
+            // 赌狗二号
+            for (int i = 0; i < player.MAP_MAX_X / 2; i++) player.go_right();
             while (true) {
                 Random random = new Random();
                 int x = random.nextInt(5);

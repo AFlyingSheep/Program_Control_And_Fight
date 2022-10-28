@@ -8,46 +8,21 @@ public class My_function {
          * If your function run out, the program will not be stop.
          * It will run over and over again.
          * So, it's time to show your creativity!
+         * 横向为X，纵向为Y
          * */
         /* Edit your code */
-//            for (int i = 0; i < 16; i++) {
-//                player.go_right();
-//            }
-//            player.go_down();
-//            player.fire();
-//
-//            for (int i = 0; i < 16; i++) {
-//                player.go_left();
-//            }
-//            player.go_up();
-//            player.fire();
-            for (int i = 0; i < 8; i++) player.go_right();
+            for (int i = 0; i < player.MAP_MAX_X / 2; i++) player.go_right();
             while (true) {
-                Random random = new Random();
-                int x = random.nextInt(5);
-                switch (x) {
-                    case 0: {
-                        player.go_up();
-                        break;
-                    }
-                    case 1: {
-                        player.go_down();
-                        break;
-                    }
-                    case 2: {
-                        player.go_right();
-                        break;
-                    }
-                    case 3: {
-                        player.go_left();
-                        break;
-                    }
-                    case 4: {
-                        player.fire();
-                        break;
-                    }
+                if (player.get_local_x() < player.get_enemy_X()) {
+                    player.go_left();
+                    player.go_down();
+                }
+                else {
+                    player.go_right();
+                    player.go_down();
                 }
             }
+
 
         /* Edit your code end*/
         }

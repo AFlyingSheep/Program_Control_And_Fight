@@ -20,6 +20,9 @@ public class Player extends Thread{
     private Semaphore semaphore;
     private Semaphore over_player_update;
 
+    public final int MAP_MAX_X = Global.MAP_MAX_X;
+    public final int MAP_MAX_Y = Global.MAP_MAX_Y;
+
     Player(int choose)
     {
         local_x = 0;
@@ -38,7 +41,7 @@ public class Player extends Thread{
         get_Sem();
         update_last();
         if (local_x < Global.MAP_MAX_Y - 1
-                && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
+                && enemy_map[Global.MAP_MAX_X - (local_x + 1) - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
         {
             local_x++;
             direction = 3;
@@ -57,7 +60,7 @@ public class Player extends Thread{
         get_Sem();
         update_last();
         if (local_x > 0 &&
-                enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
+                enemy_map[Global.MAP_MAX_X - (local_x - 1) - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
         {
             local_x--;
             direction = 2;
@@ -76,7 +79,7 @@ public class Player extends Thread{
         get_Sem();
         update_last();
         if (local_y < Global.MAP_MAX_X - 1
-                && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
+                && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - (local_y + 1) - 1] == 0)
         {
             local_y++;
             direction = 1;
@@ -95,7 +98,7 @@ public class Player extends Thread{
         get_Sem();
         update_last();
         if (local_y > 0
-                && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - local_y - 1] == 0)
+                && enemy_map[Global.MAP_MAX_X - local_x - 1][Global.MAP_MAX_Y - (local_y - 1) - 1] == 0)
         {
             local_y--;
             direction = 0;
