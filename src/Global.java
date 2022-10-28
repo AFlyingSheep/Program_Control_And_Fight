@@ -39,6 +39,9 @@ public class Global {
     static Image player1_image;
     static Image player2_image;
 
+    static Image[] blot_image;
+    static int draw_point;
+
     static Semaphore read_data;
     static Semaphore read_data1;
     static Semaphore read_data2;
@@ -71,7 +74,7 @@ public class Global {
 
     static final int BULLET_SPEED = 3;
 
-    static final int GAME_SPEED = 10;
+    static final int GAME_SPEED = 20;
 
     static final int MAX_ROUND = 256;
 
@@ -125,9 +128,17 @@ public class Global {
         game_is_over = false;
         game_result = 0;
 
+        draw_point = 0;
+
         try {
             player1_image = ImageIO.read(new FileInputStream("src/image/player1.jpg"));
             player2_image = ImageIO.read(new FileInputStream("src/image/player2.jpg"));
+
+            blot_image = new Image[10];
+
+            for (int i = 1; i <= 10; i++) {
+                blot_image[i - 1] = ImageIO.read(new FileInputStream("src/image/blot/" + i + ".png"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

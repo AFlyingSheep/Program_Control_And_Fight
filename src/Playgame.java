@@ -135,6 +135,9 @@ public class Playgame extends Thread{
 
         java.util.Timer timer = new java.util.Timer();
         timer.schedule(timerTask, 0, 100);
+
+        final int[] index = {0};
+
     }
 
     public void update_map(Player player1, Player player2) {

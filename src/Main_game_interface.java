@@ -93,7 +93,8 @@ class My_panel extends JPanel {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
 
-                if (i == Global.player1_now_x && j == Global.player1_now_y) {
+                if (i == Global.player1_now_x && j == Global.player1_now_y &&
+                        !(Global.game_is_over && (Global.game_result == 1 || Global.game_result == 3))) {
                     g.drawImage(Global.player1_image,
                             i * 20, j * 20,i * 20 + 20, j * 20 + 20,
                             0, 0,
@@ -115,7 +116,8 @@ class My_panel extends JPanel {
         // update player2
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
-                if (i == Global.player2_now_x && j == Global.player2_now_y) {
+                if (i == Global.player2_now_x && j == Global.player2_now_y &&
+                        !(Global.game_is_over && (Global.game_result == 0 || Global.game_result == 2))) {
                     g.drawImage(Global.player2_image,
                             (15 - i) * 20, (15 - j) * 20,(15 - i) * 20 + 20, (15 - j) * 20 + 20,
                             0, 0,
@@ -147,6 +149,20 @@ class My_panel extends JPanel {
                         (15 - Global.player2_fireMap[i][3]) * 20 + 7,
                         5, 5);
             }
+        }
+
+        // 爆炸特效
+        int x = (Global.game_result == 0 || Global.game_result == 2) ? (15 - Global.player2_now_x) : Global.player1_now_x;
+        int y = (Global.game_result == 0 || Global.game_result == 2) ? (15 - Global.player2_now_y) : Global.player1_now_y;
+        if (Global.game_is_over && Global.draw_point < 10) {
+            g.drawImage(Global.blot_image[Global.draw_point],
+                    x * 20 - 5, y * 20 - 5,
+                    x * 20 + 25, y * 20 + 25,
+                    0, 0,
+                    Global.blot_image[Global.draw_point].getWidth(null),
+                    Global.blot_image[Global.draw_point].getHeight(null),
+                    null);
+            Global.draw_point++;
         }
 
         if (Global.game_is_over) {
